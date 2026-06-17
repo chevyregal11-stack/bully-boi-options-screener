@@ -254,6 +254,18 @@ def main():
     else:
         print("No results. Check ticker list or data connection.")
 
+    # Create simple watchlist file
+    watchlist = df.head(5)
 
+    with open("watchlist.txt", "w") as f:
+        for _, row in watchlist.iterrows():
+            f.write(
+                f"{row['ticker']} | "
+                f"{row['direction']} | "
+                f"Score {row['score']} | "
+                f"${row['price']:.2f}\n"
+            )
+
+    print("\nSaved: watchlist.txt")
 if __name__ == "__main__":
     main()

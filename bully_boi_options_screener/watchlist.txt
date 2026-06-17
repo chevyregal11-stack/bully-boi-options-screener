@@ -1,0 +1,5 @@
+NFLX | PUT | Score 80 | $76.96
+XLE | PUT | Score 80 | $54.67
+CVX | PUT | Score 80 | $177.58
+TSLA | PUT | Score 80 | $396.38
+PLTR | PUT | Score 80 | $130.63
