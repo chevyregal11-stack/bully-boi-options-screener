@@ -185,6 +185,9 @@ def market_context():
     return bullish, bearish
 
 def get_option_contract(symbol, direction, price):
+    if direction == "PASS":
+        return {}
+
     try:
         ticker_obj = yf.Ticker(symbol)
         expirations = ticker_obj.options
