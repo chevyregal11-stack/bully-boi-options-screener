@@ -184,6 +184,44 @@ def market_context():
     bearish = last["Close"] < last["EMA9"]
     return bullish, bearish
 
+def get_option_contract(symbol, direction, price):
+    try:
+        ticker_obj = yf.Ticker(symbol)
+        expirations = ticker_obj.options
+
+        if not expirations:
+            return {}
+
+        expiration = expirations[0]
+        chain = ticker_obj.option_chain(expiration)
+
+        options = chain.calls if direction == "CALL" else chain.puts
+
+        if options.empty:
+            return {}
+
+        options["distance"] = (options["strike"] - price).abs()
+        contract = options.sort_values("distance").iloc[0]
+
+        bid = safe_float(contract.get("bid", 0))
+        ask = safe_float(contract.get("ask", 0))
+        spread_pct = ((ask - bid) / ask * 100) if ask else 999
+
+        return {
+            "option_expiration": expiration,
+            "option_type": direction,
+            "option_strike": safe_float(contract.get("strike", 0)),
+            "option_bid": bid,
+            "option_ask": ask,
+            "option_spread_pct": round(spread_pct, 2),
+            "option_volume": safe_float(contract.get("volume", 0)),
+            "option_open_interest": safe_float(contract.get("openInterest", 0)),
+            "option_symbol": contract.get("contractSymbol", ""),
+        }
+
+    except Exception:
+        return {}
+
 
 def main():
     parser = argparse.ArgumentParser(description="Bully Boi Options Play Screener")
