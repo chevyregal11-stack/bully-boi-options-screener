@@ -254,18 +254,103 @@ def main():
     else:
         print("No results. Check ticker list or data connection.")
 
-    # Create simple watchlist file
-    watchlist = df.head(5)
+  
+       
+
+    # Create phone-friendly Bully Boi watchlist
+    plays = df[df["direction"].isin(["CALL", "PUT"])].copy()
+
+    calls = plays[plays["direction"] == "CALL"].head(5)
+    puts = plays[plays["direction"] == "PUT"].head(5)
+
+    lines = []
+    lines.append("🔥 BULLY BOI WATCHLIST")
+    lines.append("")
+    lines.append("🐂 TOP CALLS")
+
+    if calls.empty:
+        lines.append("No CALL setups found")
+    else:
+        for _, row in calls.iterrows():
+            lines.append(f"{row['ticker']} | Score {row['score']} | ${row['price']:.2f}")
+
+    lines.append("")
+    lines.append("🐻 TOP PUTS")
+
+    if puts.empty:
+        lines.append("No PUT setups found")
+    else:
+        for _, row in puts.iterrows():
+            lines.append(f"{row['ticker']} | Score {row['score']} | ${row['price']:.2f}")
 
     with open("watchlist.txt", "w") as f:
-        for _, row in watchlist.iterrows():
-            f.write(
-                f"{row['ticker']} | "
-                f"{row['direction']} | "
-                f"Score {row['score']} | "
-                f"${row['price']:.2f}\n"
-            )
+        f.write("\n".join(lines))
+    html = """
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+.card {
+    background: #111;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 18px;
+    border: 1px solid #333;
+}
+h1 { color: #f5c542; }
+.call { color: #00ff88; }
+.put { color: #ff4d4d; }
+.small { color: #aaa; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>🔥 Bully Boi Dashboard</h1>
+<div class="small">Generated from your options screener</div>
 
+<div class="card">
+<h2>🐂 Top Calls</h2>
+"""
+
+    if calls.empty:
+        html += "<p>No CALL setups found</p>"
+    else:
+        for _, row in calls.iterrows():
+            html += f"<p class='call'>{row['ticker']} | Score {row['score']} | ${row['price']:.2f}</p>"
+
+    html += """
+</div>
+
+<div class="card">
+<h2>🐻 Top Puts</h2>
+"""
+
+    if puts.empty:
+        html += "<p>No PUT setups found</p>"
+    else:
+        for _, row in puts.iterrows():
+            html += f"<p class='put'>{row['ticker']} | Score {row['score']} | ${row['price']:.2f}</p>"
+
+    html += """
+</div>
+
+<div class="card small">
+Not financial advice. Confirm chart, spread, volume, and risk before trading.
+</div>
+
+</body>
+</html>
+"""
+
+    with open("dashboard.html", "w") as f:
+        f.write(html)
+
+    print("Saved: dashboard.html")
     print("\nSaved: watchlist.txt")
 if __name__ == "__main__":
     main()
