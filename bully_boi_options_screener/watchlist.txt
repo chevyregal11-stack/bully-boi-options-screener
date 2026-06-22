@@ -1,14 +1,13 @@
 🔥 BULLY BOI WATCHLIST
 
 🐂 TOP CALLS
-BAC | Score 80 | $56.20
-AMD | Score 80 | $537.37
-MU | Score 80 | $1133.99
-IWM | Score 80 | $295.59
-QQQ | Score 80 | $740.62
+MU | Score 80 | $1193.75
+IWM | Score 80 | $298.58
+BAC | Score 80 | $57.11
+USAR | Score 60 | $25.84
+USAR | Score 60 | $25.84
 
 🐻 TOP PUTS
-CVX | Score 80 | $173.63
-NFLX | Score 60 | $77.38
-PLTR | Score 60 | $128.47
-XLE | Score 60 | $53.77
+NFLX | Score 60 | $76.29
+RKLB | Score 60 | $102.12
+LUNR | Score 60 | $21.51
